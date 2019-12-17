@@ -78,9 +78,8 @@ async function modelTraining(model, inputs, labels) {
   const batchSize = 32;
   const epochs = 50;
   const lossContainer = document.getElementById("loss-cont");
-  lossContainer.innerText = "";
   console.log("traininggg", lossContainer);
-  return await model.fit(inputs, labels, {
+  await model.fit(inputs, labels, {
     batchSize,
     epochs,
     shuffle: true,
@@ -90,6 +89,7 @@ async function modelTraining(model, inputs, labels) {
       callbacks: ["onEpochEnd"]
     })
   });
+  return model;
 }
 
 export async function run(data) {
@@ -97,5 +97,6 @@ export async function run(data) {
   const model = createModel();
   const tensorData = convertToTensor(data);
   const { inputs, labels } = tensorData;
-  await modelTraining(model, inputs, labels);
+  const trained_model = await modelTraining(model, inputs, labels);
+  return trained_model;
 }

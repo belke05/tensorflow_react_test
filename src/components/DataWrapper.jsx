@@ -9,6 +9,7 @@ import ScatterPlot from "./ScatterPlot";
 export default function DataWrapper(props) {
   const [prediction, setPrediction] = useState([]);
   const [cars, setCars] = useState([]);
+  const [model, setModel] = = useState(null);
 
   useEffect(() => {
     axios
@@ -17,7 +18,7 @@ export default function DataWrapper(props) {
         const cars_returned = res.data;
         console.log(res.data);
         setCars(cars_returned);
-        run(cars_returned);
+        run(cars_returned).then(trainedModel=>{setModel(trainedModel)}).catch(err=>console.log(err))
       })
       .catch(err => {
         console.log(err);
