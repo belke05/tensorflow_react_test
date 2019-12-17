@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Tftest from "../components/Tftest";
+import DataWrapper from "../components/DataWrapper";
 
 export default function Home(props) {
   return (
     <div>
-      <Tftest />
+      <DataWrapper />
     </div>
   );
 }

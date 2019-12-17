@@ -4,29 +4,29 @@ import axios from "axios";
 import CarList from "./CarList";
 
 export default function ScatterPlot(props) {
-  const car_data = props.cars.map(car => {
-    return {
-      x: car.Horsepower,
-      y: car.Miles_per_Gallon
-    };
-  });
-  const car_names = props.cars.map(car => {
-    return car.Name;
-  });
-
+  const chartTitle = props.chartTitle;
+  const y_label = props.y_label;
+  const x_label = props.x_label;
+  const x_y = props.data;
+  const labels = props.labels;
+  const colorpoint = props.colorpoint || "rgba(75, 192, 192, 0.4)";
+  const colorpointborder = props.colorpointborder || "rgba(75,192,192,1)";
+  const width = props.width || 400;
+  const height = props.height || 400;
   const data = {
-    labels: car_names,
+    labels: labels,
     datasets: [
       {
-        label: "⛽ vs 🐎",
-        backgroundColor: "rgba(75,192,192,0.4)",
-        pointBorderColor: "rgba(75,192,192,1)",
-        data: car_data
+        label: chartTitle,
+        backgroundColor: colorpoint,
+        pointBorderColor: colorpointborder,
+        data: x_y
       }
     ]
   };
 
   const options = {
+    maintainAspectRatio: false,
     tooltips: {
       callbacks: {
         label: function(tooltipItem, data) {
@@ -36,11 +36,29 @@ export default function ScatterPlot(props) {
           );
         }
       }
+    },
+    scales: {
+      yAxes: [
+        {
+          scaleLabel: {
+            display: true,
+            labelString: y_label
+          }
+        }
+      ],
+      xAxes: [
+        {
+          scaleLabel: {
+            display: true,
+            labelString: x_label
+          }
+        }
+      ]
     }
   };
 
   return (
-    <div>
+    <div style={{ width: width, height: height }}>
       <Scatter data={data} options={options} />
     </div>
   );

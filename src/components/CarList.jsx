@@ -19,7 +19,7 @@ export default function CarList(props) {
 
   return (
     <>
-      <h1>cars data</h1>
+      <h1>cars data table</h1>
       <Table striped bordered hover variant="light">
         <thead>
           <tr>
