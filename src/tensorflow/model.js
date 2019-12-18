@@ -1,6 +1,7 @@
 import React from "react";
 import * as tf from "@tensorflow/tfjs";
 import * as tfvis from "@tensorflow/tfjs-vis";
+import { predictValue, testModel } from "./predict.js";
 
 // ----- create the model
 
@@ -11,8 +12,8 @@ function createModel() {
   // predictor
   model.add(
     tf.layers.dense({
-      units: 1,
       inputShape: [1],
+      units: 1,
       useBias: true
     })
   );
@@ -22,7 +23,7 @@ function createModel() {
 
   // Add an output layer
   // units 1  = output 1 number
-  model.add(tf.layers.dense({ units: 1, useBias: true }));
+  model.add(tf.layers.dense({ units: 1 }));
   return model;
 }
 
@@ -78,8 +79,9 @@ async function modelTraining(model, inputs, labels) {
   const batchSize = 32;
   const epochs = 50;
   const lossContainer = document.getElementById("loss-cont");
+  lossContainer.innerHTML = "";
   console.log("traininggg", lossContainer);
-  await model.fit(inputs, labels, {
+  return await model.fit(inputs, labels, {
     batchSize,
     epochs,
     shuffle: true,
@@ -89,7 +91,6 @@ async function modelTraining(model, inputs, labels) {
       callbacks: ["onEpochEnd"]
     })
   });
-  return model;
 }
 
 export async function run(data) {
@@ -97,6 +98,9 @@ export async function run(data) {
   const model = createModel();
   const tensorData = convertToTensor(data);
   const { inputs, labels } = tensorData;
-  const trained_model = await modelTraining(model, inputs, labels);
-  return trained_model;
+  await modelTraining(model, inputs, labels);
+  console.log("model trained");
+  testModel(model, data, tensorData);
+  console.log("model tested");
+  return { trainedModel: model, tensorData: tensorData };
 }
